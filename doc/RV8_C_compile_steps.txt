@@ -1,0 +1,8 @@
+1. systemctl start docker
+2. zcat rv8.gz | docker import - rv8
+3. cd simulators/rv8
+4. ./start_rv8.sh
+5. export PATH=${PATH}:/opt/riscv/toolchain/bin
+6. cd /src
+7. riscv64-unknown-elf-gcc <*.c> -o <outfile>
+8. rv-jit <outfile>
