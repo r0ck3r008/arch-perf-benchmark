@@ -146,8 +146,6 @@ void write_PPM(const char * filename, Image * img)
     fclose(fp);
 }
 
-#define max(a,b) ((a>b)?(a):(b))
-
 void swap(unsigned char*a, unsigned char*b) {
 	int temp = *a;
 	*a = *b;
@@ -184,30 +182,30 @@ void PRGA(unsigned char*M,char *pt, unsigned char *ct){
 	}
 }
 
-void encrypt_RC4(PPMImage *img){
+void encrypt_RC4(Image *img){
 	//TODO: 
-	// Convert img from img to 1D stream, perhaps as 1D stream of PPMPixel? Same way negativer color code above loops through as 1D, each pixel has 3 bytes	(RGB)
+	// Convert img from 2D image to 1D stream, perhaps as 1D stream of PPMPixel? Same way negativer color code above loops through as 1D, each pixel has 3 bytes	(RGB)
 	// define an the key K, and init empty M 
 	// then call KSA to fill M, then call PRGA to encrypt. 
 }
 
-void decrypt_RC4(PPMImage *img){
+void decrypt_RC4(Image *img){
 	//TODO: same thing as encrypt 
 }
 
-void encrypt_Vigenere(PPMImage *img){
+void encrypt_Vigenere(Image *img){
 	
 }
 
-void decrypt_Vigenere(PPMImage *img){
+void decrypt_Vigenere(Image *img){
 	
 }
 
-void encrypt_Chirikov(PPMImage *img){
+void encrypt_Chirikov(Image *img){
 	
 }
 
-void decrypt_Chirikov(PPMImage *img){
+void decrypt_Chirikov(Image *img){
 	
 }
 
