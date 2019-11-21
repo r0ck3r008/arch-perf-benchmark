@@ -225,6 +225,7 @@ Image * encrypt_Chirikov(Image *img, int K){
 	
 	Pixel * p_ct = img_cypher->data;
 	Pixel * p_pt = img->data;
+	p_ct[0].r = p_pt[0].r;
 	for (int i = 0;i<h;i++){
 		for (int j = 0;j<w;j++){
 			if (i+j!= 0) {
@@ -292,24 +293,23 @@ int main()
 	clock_t tic, toc;
     double cpu_time,num_cycles;
 
-	//read image file
-	Image * img = read_PPM("33.ppm");
-
 	
 	//apply emboss filter
 	//Image * result = emboss_image(img);
 	
 	//RC4 encrypt 
-	char *K = "m2TJtI9hiJw74UAAuMSy0klQxC8N2GPlYK5EUFZ8SJ8yJX6uSRCGMfwO06ZqgPnYOR7au4rFZPGMkEz5AZosbbuTYuuCYlcN5bDSpK6ldW44cOaGWy9N2390ababcdcd";
-	tic = clock();
-	Image * cypher = encrypt_RC4(img, K);
-	toc = clock();
-	num_cycles = (double) (toc - tic);
-	cpu_time =  num_cycles / CLOCKS_PER_SEC;
-	//write result 
-	write_PPM("encrypted.ppm", cypher);
+	//Image * img = read_PPM("33.ppm");
+	// char *K = "m2TJtI9hiJw74UAAuMSy0klQxC8N2GPlYK5EUFZ8SJ8yJX6uSRCGMfwO06ZqgPnYOR7au4rFZPGMkEz5AZosbbuTYuuCYlcN5bDSpK6ldW44cOaGWy9N2390ababcdcd";
+	// tic = clock();
+	// Image * cypher = encrypt_RC4(img, K);
+	// toc = clock();
+	// num_cycles = (double) (toc - tic);
+	// cpu_time =  num_cycles / CLOCKS_PER_SEC;
+	// //write result 
+	// write_PPM("encrypted.ppm", cypher);
 	
 	//Vignere encrypt 
+	//Image * img = read_PPM("33.ppm");
 	// char *K = "zzacdbabababababayhbabzeezggabab";	
 	// tic = clock();
 	// Image * cypher = encrypt_Vigenere(img,K);
@@ -319,14 +319,16 @@ int main()
 	// //write result 
 	// write_PPM("encrypted.ppm", cypher);
 	
-	//Chaos map encrypt 
-	// tic = clock();
-	// Image * cypher = encrypt_Chirikov(img,10000);
-	// toc = clock();
-	// num_cycles = (double) (toc - tic);
-	// cpu_time =  num_cycles / CLOCKS_PER_SEC;
-	 // //write result 
-	// write_PPM("encrypted.ppm", cypher);
+	//Chaos map encrypt
+	//read image file
+	Image * img = read_PPM("33_square.ppm");	
+	tic = clock();
+	Image * cypher = encrypt_Chirikov(img,10000);
+	toc = clock();
+	num_cycles = (double) (toc - tic);
+	cpu_time =  num_cycles / CLOCKS_PER_SEC;
+	 //write result 
+	write_PPM("encrypted.ppm", cypher);
 
 
 	
