@@ -213,41 +213,12 @@ Image * encrypt_Vigenere(Image *img, char* K){
 	
 	Pixel * p_ct = img_cypher->data;
 	Pixel * p_pt = img->data;
-	for (int i = 0;i<w;i++){
-		int j = 0;
-		while (j<h){
-			for (int k = 0;k<strlen(K);k++){
-				p_ct[i + j*w].r = (K[j] + p_pt[i + j*w].r) % 256;
-				j++;
-			}
-		}
+	for (int i = 0;i<w*h;i++){
+		p_ct[i].r = (((unsigned int)K[i % strlen(K)]) + p_pt[i].r) % 256;
 	}
 	
 	
 	return img_cypher;
-}
-
-Image * decrypt_Vigenere(Image *img, char* K){
-	//first init empty target image 
-	unsigned int w = getImgWidth(img);
-    unsigned int h = getImgHeight(img);
-	Image *img_plain = new_image(w,h);
-	
-	Pixel * p_pt = img_plain->data;
-	Pixel * p_ct = img->data;
-	for (int i = 0;i<w;i++){
-		int j = 0;
-		while (j<h){
-			for (int k = 0;k<strlen(K);k++){
-				p_pt[i + j*w].r = (K[k] - p_ct[i + j*w].r) % 256;
-				j++;
-			}
-			
-		}
-	}
-	
-	
-	return img_plain;
 }
 
 Image * encrypt_Chirikov(Image *img, int K){
@@ -345,24 +316,23 @@ int main()
 	//write_PPM("encrypted.ppm", img);
 	
 	//Vignere encrypt 
-	// char *K;	
-	// strncpy(K,"\xb5\x77\xfc\xd7\x17\xa7\x6b\x3f\xfc\x17\xa3\x2e\x97\x8e\x22\x49\xd8\x72\xd7\xd8\x7a\xc1\x8b\x1b\xd5\xb1\x20\x51\xfa\xeb\xff\x9f",32);
-	// tic = clock();
-	// Image * cypher = encrypt_Vigenere(img,K);
-	// toc = clock();
-	// num_cycles = (double) (toc - tic);
-	// cpu_time =  num_cycles / CLOCKS_PER_SEC;
-	// //write result 
-	// write_PPM("encrypted.ppm", cypher);
-	
-	//Chaos map encrypt 
+	char *K = "zzacdbabababababayhbabzeezggabab";	
 	tic = clock();
-	Image * cypher = encrypt_Chirikov(img,10000);
+	Image * cypher = encrypt_Vigenere(img,K);
 	toc = clock();
 	num_cycles = (double) (toc - tic);
 	cpu_time =  num_cycles / CLOCKS_PER_SEC;
-	 //write result 
+	//write result 
 	write_PPM("encrypted.ppm", cypher);
+	
+	//Chaos map encrypt 
+	// tic = clock();
+	// Image * cypher = encrypt_Chirikov(img,10000);
+	// toc = clock();
+	// num_cycles = (double) (toc - tic);
+	// cpu_time =  num_cycles / CLOCKS_PER_SEC;
+	 // //write result 
+	// write_PPM("encrypted.ppm", cypher);
 
 
 	
