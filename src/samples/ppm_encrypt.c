@@ -156,26 +156,28 @@ void swap(unsigned char*a, unsigned char*b) {
 
 //Output M is a 256 byte state vector, initialized by K with 128 byte length
 void KSA(char *K,unsigned char *M){
-	char *T; //potential error initializing without length known
+	//char *T[256]; 
 	for (int k = 0;k < 256;k++){
 		M[k] = k;
-		T[k] = K[k % 128]; //key has length of 128 bytes
+		//T[k] = K[k % 128]; //key has length of 128 bytes
 	}
 	
 	int j = 0;
 	for (int k = 0;k < 256;k++){
-		j = (j + M[k] + T[k]) % 256;
+		j = (j + M[k] + K[k % 128]) % 256;
 		swap(&M[k],&M[j]); // this should swap them within M
 	}
 }
 
-void PRGA(Image * img, unsigned char*M){ 
+Image * PRGA(Image * img, unsigned char*M){ 
 	unsigned int w = getImgWidth(img);
     unsigned int h = getImgHeight(img);
+	Image *img_cypher = new_image(w,h);
 	 
 	int k,j = 0;
 	
-	Pixel * p = img->data;
+	Pixel * p_ct = img_cypher->data;
+	Pixel * p_pt = img->data;
 	for (int i = 0;i < w*h;i++){
 		
 		k = (k+1) % 256;
@@ -183,26 +185,19 @@ void PRGA(Image * img, unsigned char*M){
 		swap(&M[k],&M[j]);
 		
 		//apply key as xor with just red channel for now.
-		p[i].r = ((M[k]+M[j]) % 256) ^ p[i].r;
+		p_ct[i].r = ((M[k]+M[j]) % 256) ^ p_pt[i].r;
 	}
+	
+	return img_cypher;
 }
 
-void encrypt_RC4(Image *img,char *K){
+Image * encrypt_RC4(Image *img,char *K){
 	//define key and M to fill  
 	unsigned char M[256]; 
 	
 	KSA(K,M);
 	
-	PRGA(img,M);
-}
-//same as encrypt 
-void decrypt_RC4(Image *img,char *K){ 
-	//define key and M to fill  
-	unsigned char M[256];
-	
-	KSA(K,M);
-	
-	PRGA(img,M);
+	return PRGA(img,M);
 }
 
 Image * encrypt_Vigenere(Image *img, char* K){
@@ -305,25 +300,24 @@ int main()
 	//Image * result = emboss_image(img);
 	
 	//RC4 encrypt 
-	//char *K;
-	//strncpy(K,"\xee\xf7\x62\x66\x74\x48\xb9\x43\x4d\xaf\xe5\xf7\xb2\x68\xf5\xec\xf6\x53\x46\xcd\x0e\x54\xcf\xb9\x9f\x9d\x6f\xca\x45\xec\x91\x15\x87\x12\x3f\x2c\xcc\xbc\xaf\x51\x54\xb8\x85\x86\xfb\x48\x3d\x6d\xf0\xad\xb1\xd4\x5f\x5c\x65\x0a\xc7\x14\x16\x03\xd2\x15\x5d\x90\xb9\x2b\x03\x06\xc4\xa2\xf7\xee\xce\x81\xd0\x25\x40\xec\xfc\xc7\xa9\x7e\xec\x28\x58\x02\xc8\xd1\x9c\x88\xfc\x49\x30\x1e\xb8\xce\xf4\x11\x62\x85\x75\x43\x2b\x3d\x3e\x4f\x95\xac\x43\x16\x36\xdc\xec\x96\xff\xf8\xe6\xbc\xa2\xb4\xd7\x5e\xcd\xad\xd8\x8a\x28\xd1",128);
-	//tic = clock();
-	//encrypt_RC4(img, K);
-	//toc = clock();
-	//num_cycles = (double) (toc - tic);
-	//cpu_time =  num_cycles / CLOCKS_PER_SEC;
-	//write result 
-	//write_PPM("encrypted.ppm", img);
-	
-	//Vignere encrypt 
-	char *K = "zzacdbabababababayhbabzeezggabab";	
+	char *K = "m2TJtI9hiJw74UAAuMSy0klQxC8N2GPlYK5EUFZ8SJ8yJX6uSRCGMfwO06ZqgPnYOR7au4rFZPGMkEz5AZosbbuTYuuCYlcN5bDSpK6ldW44cOaGWy9N2390ababcdcd";
 	tic = clock();
-	Image * cypher = encrypt_Vigenere(img,K);
+	Image * cypher = encrypt_RC4(img, K);
 	toc = clock();
 	num_cycles = (double) (toc - tic);
 	cpu_time =  num_cycles / CLOCKS_PER_SEC;
 	//write result 
 	write_PPM("encrypted.ppm", cypher);
+	
+	//Vignere encrypt 
+	// char *K = "zzacdbabababababayhbabzeezggabab";	
+	// tic = clock();
+	// Image * cypher = encrypt_Vigenere(img,K);
+	// toc = clock();
+	// num_cycles = (double) (toc - tic);
+	// cpu_time =  num_cycles / CLOCKS_PER_SEC;
+	// //write result 
+	// write_PPM("encrypted.ppm", cypher);
 	
 	//Chaos map encrypt 
 	// tic = clock();
