@@ -250,21 +250,21 @@ Image * decrypt_Vigenere(Image *img, char* K){
 	return img_plain;
 }
 
-Image * encrypt_Chirikov(Image *img, unsigned int K){
+Image * encrypt_Chirikov(Image *img, int K){
 	unsigned int w = getImgWidth(img);
     unsigned int h = getImgHeight(img);
 	Image *img_cypher = new_image(w,h);
 	
-	int x_prime, y_prime;
+	int i_prime, j_prime;
 	
 	Pixel * p_ct = img_cypher->data;
 	Pixel * p_pt = img->data;
-	for (int i = 0;i<w;i++){
-		for (int j = 0;j<h;j++){
+	for (int i = 0;i<h;i++){
+		for (int j = 0;j<w;j++){
 			if (i+j!= 0) {
-				x_prime = (i-1+j-1) % h;
-				y_prime = (unsigned int ) (floor(j-1+K*sin(2*M_PI*x_prime/h))) % h;
-				p_ct[x_prime + y_prime*w].r = p_pt[i + j*w].r;
+				i_prime = (i-1+j-1) % h;
+				j_prime = (int) (floor(j-1+K*sin(2*M_PI*i_prime/h))) % h;
+				p_ct[i_prime*w + j_prime].r = p_pt[j + i*w].r;
 			}
 		}
 	}
@@ -272,27 +272,6 @@ Image * encrypt_Chirikov(Image *img, unsigned int K){
 	return img_cypher;
 }
 
-Image * decrypt_Chirikov(Image *img, unsigned int K){
-	unsigned int w = getImgWidth(img);
-    unsigned int h = getImgHeight(img);
-	Image *img_plain = new_image(w,h);
-	
-	int x_prime, y_prime;
-	
-	Pixel * p_pt = img_plain->data;
-	Pixel * p_ct = img->data;
-	for (int i = 0;i<w;i++){
-		for (int j = 0;j<h;j++){
-			if (i+j!= 0) {
-				x_prime = (unsigned int ) (floor(i-j+K*sin(2*M_PI*i/h))) % h;
-				y_prime = (unsigned int ) (floor(j-K*sin(2*M_PI*i/h))) % h;
-				p_pt[x_prime + y_prime*w].r = p_ct[i + j*w].r;
-			}
-		}
-	}
-	
-	return img_plain;
-}
 
 #define max(a,b) ((a>b)?(a):(b))
 
@@ -355,35 +334,35 @@ int main()
 	//Image * result = emboss_image(img);
 	
 	//RC4 encrypt 
-	char *K;
-	strncpy(K,"\xee\xf7\x62\x66\x74\x48\xb9\x43\x4d\xaf\xe5\xf7\xb2\x68\xf5\xec\xf6\x53\x46\xcd\x0e\x54\xcf\xb9\x9f\x9d\x6f\xca\x45\xec\x91\x15\x87\x12\x3f\x2c\xcc\xbc\xaf\x51\x54\xb8\x85\x86\xfb\x48\x3d\x6d\xf0\xad\xb1\xd4\x5f\x5c\x65\x0a\xc7\x14\x16\x03\xd2\x15\x5d\x90\xb9\x2b\x03\x06\xc4\xa2\xf7\xee\xce\x81\xd0\x25\x40\xec\xfc\xc7\xa9\x7e\xec\x28\x58\x02\xc8\xd1\x9c\x88\xfc\x49\x30\x1e\xb8\xce\xf4\x11\x62\x85\x75\x43\x2b\x3d\x3e\x4f\x95\xac\x43\x16\x36\xdc\xec\x96\xff\xf8\xe6\xbc\xa2\xb4\xd7\x5e\xcd\xad\xd8\x8a\x28\xd1",128);
+	//char *K;
+	//strncpy(K,"\xee\xf7\x62\x66\x74\x48\xb9\x43\x4d\xaf\xe5\xf7\xb2\x68\xf5\xec\xf6\x53\x46\xcd\x0e\x54\xcf\xb9\x9f\x9d\x6f\xca\x45\xec\x91\x15\x87\x12\x3f\x2c\xcc\xbc\xaf\x51\x54\xb8\x85\x86\xfb\x48\x3d\x6d\xf0\xad\xb1\xd4\x5f\x5c\x65\x0a\xc7\x14\x16\x03\xd2\x15\x5d\x90\xb9\x2b\x03\x06\xc4\xa2\xf7\xee\xce\x81\xd0\x25\x40\xec\xfc\xc7\xa9\x7e\xec\x28\x58\x02\xc8\xd1\x9c\x88\xfc\x49\x30\x1e\xb8\xce\xf4\x11\x62\x85\x75\x43\x2b\x3d\x3e\x4f\x95\xac\x43\x16\x36\xdc\xec\x96\xff\xf8\xe6\xbc\xa2\xb4\xd7\x5e\xcd\xad\xd8\x8a\x28\xd1",128);
+	//tic = clock();
+	//encrypt_RC4(img, K);
+	//toc = clock();
+	//num_cycles = (double) (toc - tic);
+	//cpu_time =  num_cycles / CLOCKS_PER_SEC;
+	//write result 
+	//write_PPM("encrypted.ppm", img);
+	
+	//Vignere encrypt 
+	// char *K;	
+	// strncpy(K,"\xb5\x77\xfc\xd7\x17\xa7\x6b\x3f\xfc\x17\xa3\x2e\x97\x8e\x22\x49\xd8\x72\xd7\xd8\x7a\xc1\x8b\x1b\xd5\xb1\x20\x51\xfa\xeb\xff\x9f",32);
+	// tic = clock();
+	// Image * cypher = encrypt_Vigenere(img,K);
+	// toc = clock();
+	// num_cycles = (double) (toc - tic);
+	// cpu_time =  num_cycles / CLOCKS_PER_SEC;
+	// //write result 
+	// write_PPM("encrypted.ppm", cypher);
+	
+	//Chaos map encrypt 
 	tic = clock();
-	encrypt_RC4(img, K);
+	Image * cypher = encrypt_Chirikov(img,10000);
 	toc = clock();
 	num_cycles = (double) (toc - tic);
 	cpu_time =  num_cycles / CLOCKS_PER_SEC;
-	//write result 
-	write_PPM("result.ppm", img);
-	
-	//Vignere encrypt 
-	//char *K;
-	//strncpy(K,"\xb5\x77\xfc\xd7\x17\xa7\x6b\x3f\xfc\x17\xa3\x2e\x97\x8e\x22\x49\xd8\x72\xd7\xd8\x7a\xc1\x8b\x1b\xd5\xb1\x20\x51\xfa\xeb\xff\x9f",32);
-	//tic = clock();
-	//Image * cypher = encrypt_Vigenere(img,K);
-	//toc = clock();
-	//num_cycles = (double) (toc - tic);
-	//cpu_time =  num_cycles / CLOCKS_PER_SEC;
-	//write result 
-	//write_PPM("result.ppm", cypher);
-	
-	//Chaos map encrypt 
-	//tic = clock();
-	//Image * cypher = encrypt_Vigenere(img,K);
-	//toc = clock();
-	//num_cycles = (double) (toc - tic);
-	//cpu_time =  num_cycles / CLOCKS_PER_SEC;
-	//write result 
-	//write_PPM("result.ppm", cypher);
+	 //write result 
+	write_PPM("encrypted.ppm", cypher);
 
 
 	
