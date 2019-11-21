@@ -225,6 +225,7 @@ Image * decrypt_Chirikov(Image *img, int K){
 	
 	Pixel * p_pt = img_plain->data;
 	Pixel * p_ct = img->data;
+	p_pt[0].r = p_ct[0].g;
 	for (int i = 0;i<h;i++){
 		for (int j = 0;j<w;j++){
 			if (i+j!= 0) {
@@ -302,14 +303,14 @@ int main()
 	//Image * result = emboss_image(img);
 	
 	//RC4 decrypt 
-	char *K = "m2TJtI9hiJw74UAAuMSy0klQxC8N2GPlYK5EUFZ8SJ8yJX6uSRCGMfwO06ZqgPnYOR7au4rFZPGMkEz5AZosbbuTYuuCYlcN5bDSpK6ldW44cOaGWy9N2390ababcdcd";
-	tic = clock();
-	Image * cypher= encrypt_RC4(img, K);
-	toc = clock();
-	num_cycles = (double) (toc - tic);
-	cpu_time =  num_cycles / CLOCKS_PER_SEC;
-	//write result 
-	write_PPM("decrypted.ppm", cypher);
+	// char *K = "m2TJtI9hiJw74UAAuMSy0klQxC8N2GPlYK5EUFZ8SJ8yJX6uSRCGMfwO06ZqgPnYOR7au4rFZPGMkEz5AZosbbuTYuuCYlcN5bDSpK6ldW44cOaGWy9N2390ababcdcd";
+	// tic = clock();
+	// Image * cypher= encrypt_RC4(img, K);
+	// toc = clock();
+	// num_cycles = (double) (toc - tic);
+	// cpu_time =  num_cycles / CLOCKS_PER_SEC;
+	// //write result 
+	// write_PPM("decrypted.ppm", cypher);
 	
 	//Vignere decrypt 	
 	// char *K = "zzacdbabababababayhbabzeezggabab";	
@@ -322,13 +323,13 @@ int main()
 	// write_PPM("decrypted.ppm", cypher);
 	
 	//Chaos map decrypt 
-	// tic = clock();
-	// Image * cypher = decrypt_Chirikov(img,10000);
-	// toc = clock();
-	// num_cycles = (double) (toc - tic);
-	// cpu_time =  num_cycles / CLOCKS_PER_SEC;
-	 // //write result 
-	// write_PPM("decrypted.ppm", cypher);
+	tic = clock();
+	Image * cypher = decrypt_Chirikov(img,10000);
+	toc = clock();
+	num_cycles = (double) (toc - tic);
+	cpu_time =  num_cycles / CLOCKS_PER_SEC;
+	 //write result 
+	write_PPM("decrypted.ppm", cypher);
 
 
 	
