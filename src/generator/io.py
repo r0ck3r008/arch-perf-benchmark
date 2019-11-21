@@ -1,5 +1,15 @@
-from os import mkfifo
+from os import mkfifo, OSError, _exit
+from sys import stderr
 
-def open_fifo(fnmae):
+def open_fifo(fname):
     try:
-        ``mkfifo()
+        os.mkfifo(fname)
+    except OSError, e:
+        print(stderr, "[!]Fifo already exists!")
+    except Exception as e:
+        print(stderr, "[-]Error in creating the fifo: {}".format(e))
+        _exit(-1)
+
+def write(fname, data):
+    with open(fname, 'r') as f:
+
