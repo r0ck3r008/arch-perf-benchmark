@@ -225,12 +225,12 @@ Image * encrypt_Chirikov(Image *img, int K){
 	
 	Pixel * p_ct = img_cypher->data;
 	Pixel * p_pt = img->data;
-	p_ct[0].r = p_pt[0].r;
+	//p_ct[0].r = p_pt[0].r;
 	for (int i = 0;i<h;i++){
 		for (int j = 0;j<w;j++){
 			if (i+j!= 0) {
 				i_prime = (i-1+j-1) % h;
-				j_prime = (int) (floor(j-1+K*sin(2*M_PI*i_prime/h))) % h;
+				j_prime = (int) (floor(j-1+K*sin(2*3.14159*i_prime/h))) % h;
 				p_ct[i_prime*w + j_prime].r = p_pt[j + i*w].r;
 			}
 		}
@@ -291,7 +291,8 @@ int main()
 	//char filename[80] = "/home/naman/pic.ppm";
 	
 	clock_t tic, toc;
-    double cpu_time,num_cycles;
+        long double cpu_time;
+        long double num_cycles;
 
 	
 	//apply emboss filter
@@ -319,14 +320,18 @@ int main()
 	// //write result 
 	// write_PPM("encrypted.ppm", cypher);
 	
+	//TODO: maybe loop over this for 60 images (one second of data) and get an average cpu time.
 	//Chaos map encrypt
 	//read image file
 	Image * img = read_PPM("33_square.ppm");	
 	tic = clock();
 	Image * cypher = encrypt_Chirikov(img,10000);
 	toc = clock();
-	num_cycles = (double) (toc - tic);
+	num_cycles = (long double) (toc - tic);
 	cpu_time =  num_cycles / CLOCKS_PER_SEC;
+	printf("Cycles: %Lf", num_cycles);
+        printf("CPU Time: %Lf", cpu_time);
+	//printf("Clocks per sec",CLOCKS_PER_SEC);
 	 //write result 
 	write_PPM("encrypted.ppm", cypher);
 
