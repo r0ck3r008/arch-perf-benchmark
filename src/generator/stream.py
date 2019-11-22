@@ -14,11 +14,14 @@ def parse_file_type(s_file):
     elif len(splt)==0:
         to_stream_vid(int(s_file))
 
+#TODO
+#handle networked stream, form a packet header to pass numpy.ndarray to the pipe
 def to_stream_vid(s_file):
     cap_obj=cv2.VideoCapture(s_file)
     while True:
+        #to numpy.ndarray
         _, frame=cap_obj.read()
-        to_stream_img(frame)
+        print(type(frame))
 
         if cv2.waitKey(1) & 0xFF==ord('q'):
             break
@@ -27,6 +30,7 @@ def to_stream_vid(s_file):
     cv2.destroyAllWindows()
 
 def to_stream_img(s_file):
+    #to numpy.ndarray
     pxl_array=imread(s_file)
-    print(pxl_array)
+    print(type(pxl_array))
 
