@@ -4,7 +4,7 @@ from sys import stderr
 def open_fifo(fname):
     try:
         os.mkfifo(fname)
-    except OSError, e:
+    except OSError as e:
         print(stderr, "[!]Fifo already exists!")
     except Exception as e:
         print(stderr, "[-]Error in creating the fifo: {}".format(e))
@@ -12,4 +12,4 @@ def open_fifo(fname):
 
 def write(fname, data):
     with open(fname, 'r') as f:
-
+        pass
