@@ -156,7 +156,7 @@ void swap(unsigned char*a, unsigned char*b) {
 
 //Output M is a 256 byte state vector, initialized by K with 128 byte length
 void KSA(char *K,unsigned char *M){
-	//char *T[128]; //optimized so slightly different than pseudocode
+	//char *T[256]; 
 	for (int k = 0;k < 256;k++){
 		M[k] = k;
 		//T[k] = K[k % 128]; //key has length of 128 bytes
@@ -172,12 +172,12 @@ void KSA(char *K,unsigned char *M){
 Image * PRGA(Image * img, unsigned char*M){ 
 	unsigned int w = getImgWidth(img);
     unsigned int h = getImgHeight(img);
-	Image *img_plain = new_image(w,h);
+	Image *img_cypher = new_image(w,h);
 	 
 	int k,j = 0;
 	
-	Pixel * p_pt = img_plain->data;
-	Pixel * p_ct = img->data;
+	Pixel * p_ct = img_cypher->data;
+	Pixel * p_pt = img->data;
 	for (int i = 0;i < w*h;i++){
 		
 		k = (k+1) % 256;
@@ -185,10 +185,10 @@ Image * PRGA(Image * img, unsigned char*M){
 		swap(&M[k],&M[j]);
 		
 		//apply key as xor with just red channel for now.
-		p_pt[i].r = ((M[k]+M[j]) % 256) ^ p_ct[i].g;
+		p_ct[i].r = ((M[k]+M[j]) % 256) ^ p_pt[i].r;
 	}
 	
-	return img_plain;
+	return img_cypher;
 }
 
 Image * encrypt_RC4(Image *img,char *K){
@@ -200,43 +200,43 @@ Image * encrypt_RC4(Image *img,char *K){
 	return PRGA(img,M);
 }
 
-
-Image * decrypt_Vigenere(Image *img, char* K){
+Image * encrypt_Vigenere(Image *img, char* K){
 	//first init empty target image 
 	unsigned int w = getImgWidth(img);
     unsigned int h = getImgHeight(img);
-	Image *img_plain = new_image(w,h);
+	Image *img_cypher = new_image(w,h);
 	
-	Pixel * p_pt = img_plain->data;
-	Pixel * p_ct = img->data;
+	Pixel * p_ct = img_cypher->data;
+	Pixel * p_pt = img->data;
 	for (int i = 0;i<w*h;i++){
-		p_pt[i].r = ( p_ct[i].g - ((unsigned int)K[i % strlen(K)])) % 256;
+		p_ct[i].r = (((unsigned int)K[i % strlen(K)]) + p_pt[i].r) % 256;
 	}
 	
-	return img_plain;
+	
+	return img_cypher;
 }
 
-Image * decrypt_Chirikov(Image *img, int K){
+Image * encrypt_Chirikov(Image *img, int K){
 	unsigned int w = getImgWidth(img);
     unsigned int h = getImgHeight(img);
-	Image *img_plain = new_image(w,h);
+	Image *img_cypher = new_image(w,h);
 	
 	int i_prime, j_prime;
 	
-	Pixel * p_pt = img_plain->data;
-	Pixel * p_ct = img->data;
-	p_pt[0].r = p_ct[0].g;
+	Pixel * p_ct = img_cypher->data;
+	Pixel * p_pt = img->data;
+	//p_ct[0].r = p_pt[0].r;
 	for (int i = 0;i<h;i++){
 		for (int j = 0;j<w;j++){
 			if (i+j!= 0) {
-				i_prime = ( int ) (floor(i-j+K*sin(2*M_PI*i/h))) % h;
-				j_prime = ( int ) (floor(j-K*sin(2*M_PI*i/h))) % h;
-				p_pt[i_prime*w + j_prime].r = p_ct[j + i*w].g;
+				i_prime = (i-1+j-1) % h;
+				j_prime = (int) (floor(j-1+K*sin(2*3.14159*i_prime/h))) % h;
+				p_ct[i_prime*w + j_prime].r = p_pt[j + i*w].r;
 			}
 		}
 	}
 	
-	return img_plain;
+	return img_cypher;
 }
 
 
@@ -291,45 +291,51 @@ int main()
 	//char filename[80] = "/home/naman/pic.ppm";
 	
 	clock_t tic, toc;
-    double cpu_time,num_cycles;
+        long double cpu_time;
+        long double num_cycles;
 
-	//read image file
-	Image * img = read_PPM("encrypted.ppm");
-	//bjohn: found bug, reading then immediatly writing the same image 
-	//results in the red channel being stored in the green channel ...
-	//write_PPM("encrypted.ppm", img);
 	
 	//apply emboss filter
 	//Image * result = emboss_image(img);
 	
-	//RC4 decrypt 
-	// char *K = "m2TJtI9hiJw74UAAuMSy0klQxC8N2GPlYK5EUFZ8SJ8yJX6uSRCGMfwO06ZqgPnYOR7au4rFZPGMkEz5AZosbbuTYuuCYlcN5bDSpK6ldW44cOaGWy9N2390ababcdcd";
-	// tic = clock();
-	// Image * cypher= encrypt_RC4(img, K);
-	// toc = clock();
-	// num_cycles = (double) (toc - tic);
-	// cpu_time =  num_cycles / CLOCKS_PER_SEC;
-	// //write result 
-	// write_PPM("decrypted.ppm", cypher);
-	
-	//Vignere decrypt 	
-	// char *K = "zzacdbabababababayhbabzeezggabab";	
-	// tic = clock();
-	// Image * cypher = decrypt_Vigenere(img,K);
-	// toc = clock();
-	// num_cycles = (double) (toc - tic);
-	// cpu_time =  num_cycles / CLOCKS_PER_SEC;
-	// //write result 
-	// write_PPM("decrypted.ppm", cypher);
-	
-	//Chaos map decrypt 
+	//RC4 encrypt 
+	Image * img = read_PPM("./src_images/640_480.ppm");
+	char *K = "m2TJtI9hiJw74UAAuMSy0klQxC8N2GPlYK5EUFZ8SJ8yJX6uSRCGMfwO06ZqgPnYOR7au4rFZPGMkEz5AZosbbuTYuuCYlcN5bDSpK6ldW44cOaGWy9N2390ababcdcd";
 	tic = clock();
-	Image * cypher = decrypt_Chirikov(img,10000);
+	Image * cypher = encrypt_RC4(img, K);
 	toc = clock();
 	num_cycles = (double) (toc - tic);
 	cpu_time =  num_cycles / CLOCKS_PER_SEC;
+	printf("Cycles: %Lf", num_cycles);
+        printf("CPU Time: %Lf", cpu_time);
+	//write result 
+	write_PPM("./output/encrypted_rc4_640.ppm", cypher);
+	
+	//Vignere encrypt 
+	//Image * img = read_PPM("./src_images/320_240.ppm");
+	//char *K = "zzacdbabababababayhbabzeezggabab";	
+	//tic = clock();
+	//Image * cypher = encrypt_Vigenere(img,K);
+	//toc = clock();
+	//num_cycles = (double) (toc - tic);
+	//cpu_time =  num_cycles / CLOCKS_PER_SEC;
+	// //write result 
+	//write_PPM("./output/encrypted_vignere_320.ppm", cypher);
+	
+	//TODO: maybe loop over this for 60 images (one second of data) and get an average cpu time.
+	//Chaos map encrypt
+	//read image file
+	//Image * img = read_PPM("./src_images/320_320.ppm");	
+	//tic = clock();
+	//Image * cypher = encrypt_Chirikov(img,10000);
+	//toc = clock();
+	//num_cycles = (long double) (toc - tic);
+	//cpu_time =  num_cycles / CLOCKS_PER_SEC;
+	//printf("Cycles: %Lf", num_cycles);
+        //printf("CPU Time: %Lf", cpu_time);
+	//printf("Clocks per sec",CLOCKS_PER_SEC);
 	 //write result 
-	write_PPM("decrypted.ppm", cypher);
+	//write_PPM("./output/encrypted_chaos_320.ppm", cypher);
 
 
 	

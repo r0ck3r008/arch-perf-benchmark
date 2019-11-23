@@ -299,41 +299,43 @@ int main()
 	//Image * result = emboss_image(img);
 	
 	//RC4 encrypt 
-	//Image * img = read_PPM("33.ppm");
-	// char *K = "m2TJtI9hiJw74UAAuMSy0klQxC8N2GPlYK5EUFZ8SJ8yJX6uSRCGMfwO06ZqgPnYOR7au4rFZPGMkEz5AZosbbuTYuuCYlcN5bDSpK6ldW44cOaGWy9N2390ababcdcd";
-	// tic = clock();
-	// Image * cypher = encrypt_RC4(img, K);
-	// toc = clock();
-	// num_cycles = (double) (toc - tic);
-	// cpu_time =  num_cycles / CLOCKS_PER_SEC;
-	// //write result 
-	// write_PPM("encrypted.ppm", cypher);
+	Image * img = read_PPM("./src_images/800_600.ppm");
+	char *K = "m2TJtI9hiJw74UAAuMSy0klQxC8N2GPlYK5EUFZ8SJ8yJX6uSRCGMfwO06ZqgPnYOR7au4rFZPGMkEz5AZosbbuTYuuCYlcN5bDSpK6ldW44cOaGWy9N2390ababcdcd";
+	tic = clock();
+	Image * cypher = encrypt_RC4(img, K);
+	toc = clock();
+	num_cycles = (double) (toc - tic);
+	cpu_time =  num_cycles / CLOCKS_PER_SEC;
+	printf("Cycles: %Lf", num_cycles);
+        printf("CPU Time: %Lf", cpu_time);
+	//write result 
+	write_PPM("./output/encrypted_rc4_800.ppm", cypher);
 	
 	//Vignere encrypt 
-	//Image * img = read_PPM("33.ppm");
-	// char *K = "zzacdbabababababayhbabzeezggabab";	
-	// tic = clock();
-	// Image * cypher = encrypt_Vigenere(img,K);
-	// toc = clock();
-	// num_cycles = (double) (toc - tic);
-	// cpu_time =  num_cycles / CLOCKS_PER_SEC;
+	//Image * img = read_PPM("./src_images/320_240.ppm");
+	//char *K = "zzacdbabababababayhbabzeezggabab";	
+	//tic = clock();
+	//Image * cypher = encrypt_Vigenere(img,K);
+	//toc = clock();
+	//num_cycles = (double) (toc - tic);
+	//cpu_time =  num_cycles / CLOCKS_PER_SEC;
 	// //write result 
-	// write_PPM("encrypted.ppm", cypher);
+	//write_PPM("./output/encrypted_vignere_320.ppm", cypher);
 	
 	//TODO: maybe loop over this for 60 images (one second of data) and get an average cpu time.
 	//Chaos map encrypt
 	//read image file
-	Image * img = read_PPM("33_square.ppm");	
-	tic = clock();
-	Image * cypher = encrypt_Chirikov(img,10000);
-	toc = clock();
-	num_cycles = (long double) (toc - tic);
-	cpu_time =  num_cycles / CLOCKS_PER_SEC;
-	printf("Cycles: %Lf", num_cycles);
-        printf("CPU Time: %Lf", cpu_time);
+	//Image * img = read_PPM("./src_images/320_320.ppm");	
+	//tic = clock();
+	//Image * cypher = encrypt_Chirikov(img,10000);
+	//toc = clock();
+	//num_cycles = (long double) (toc - tic);
+	//cpu_time =  num_cycles / CLOCKS_PER_SEC;
+	//printf("Cycles: %Lf", num_cycles);
+        //printf("CPU Time: %Lf", cpu_time);
 	//printf("Clocks per sec",CLOCKS_PER_SEC);
 	 //write result 
-	write_PPM("encrypted.ppm", cypher);
+	//write_PPM("./output/encrypted_chaos_320.ppm", cypher);
 
 
 	
