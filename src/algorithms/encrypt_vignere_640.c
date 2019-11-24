@@ -291,8 +291,8 @@ int main()
 	//char filename[80] = "/home/naman/pic.ppm";
 	
 	clock_t tic, toc;
-        long double cpu_time;
-        long double num_cycles;
+        double cpu_time;
+        double num_cycles;
 
 	
 	//apply emboss filter
@@ -315,10 +315,10 @@ int main()
 	tic = clock();
 	Image * cypher = encrypt_Vigenere(img,K);
 	toc = clock();
-	num_cycles = (double) (toc - tic);
-	cpu_time =  num_cycles / CLOCKS_PER_SEC;
-	printf("Cycles: %Lf", num_cycles);
-        printf("CPU Time: %Lf", cpu_time);
+	cpu_time =  (double) (toc-tic)*1000.0/ CLOCKS_PER_SEC;
+	printf("Cycles: %lf", num_cycles);
+        printf("CPU Time: %lf \n", cpu_time);
+	
 	//write result 
 	write_PPM("./output/encrypted_vignere_640.ppm", cypher);
 	

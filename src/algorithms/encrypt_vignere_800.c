@@ -291,8 +291,8 @@ int main()
 	//char filename[80] = "/home/naman/pic.ppm";
 	
 	clock_t tic, toc;
-        long double cpu_time;
-        long double num_cycles;
+        double cpu_time;
+        double num_cycles;
 
 	
 	//apply emboss filter
@@ -310,16 +310,15 @@ int main()
 	// write_PPM("encrypted.ppm", cypher);
 	
 	//Vignere encrypt 
-	Image * img = read_PPM("./src_images/800_640.ppm");
+	Image * img = read_PPM("./src_images/800_600.ppm");
 	char *K = "zzacdbabababababayhbabzeezggabab";	
 	tic = clock();
 	Image * cypher = encrypt_Vigenere(img,K);
 	toc = clock();
-	num_cycles = (double) (toc - tic);
-	cpu_time =  num_cycles / CLOCKS_PER_SEC;
-	//write result 
-	printf("Cycles: %Lf", num_cycles);
-        printf("CPU Time: %Lf", cpu_time);
+	cpu_time =  (double) (toc-tic)*1000.0/ CLOCKS_PER_SEC;
+	printf("Cycles: %lf", num_cycles);
+        printf("CPU Time: %lf \n", cpu_time);
+	
 	write_PPM("./output/encrypted_vignere_800.ppm", cypher);
 	
 	//TODO: maybe loop over this for 60 images (one second of data) and get an average cpu time.
