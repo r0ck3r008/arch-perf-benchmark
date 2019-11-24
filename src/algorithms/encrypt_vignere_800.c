@@ -312,13 +312,41 @@ int main()
 	//Vignere encrypt 
 	Image * img = read_PPM("./src_images/800_600.ppm");
 	char *K = "zzacdbabababababayhbabzeezggabab";	
-	tic = clock();
-	Image * cypher = encrypt_Vigenere(img,K);
-	toc = clock();
-	cpu_time =  (double) (toc-tic)*1000.0/ CLOCKS_PER_SEC;
-	printf("Cycles: %lf", num_cycles);
-        printf("CPU Time: %lf \n", cpu_time);
 	
+	int count = 60;
+	double times[count];
+	double sum = 0.0;
+	for (int c = 0;c<count;c++){
+		tic = clock();
+		//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
+		//getrusage(RUSAGE_SELF, &before);
+
+		Image * cypher = encrypt_Vigenere(img,K);
+
+		toc = clock();
+		//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &stop);
+		//getrusage(RUSAGE_SELF, &after);	
+
+		//clock_gettime() method
+		//double cpu_time = (stop.tv_sec - start.tv_sec) * 1e6 + (stop.tv_nsec - start.tv_nsec) / 1e3;    //microseconds
+		//printf("CPU Time: %lf", cpu_time*.001);
+
+		//clock() method 
+		//num_cycles = (double) (toc - tic);
+		cpu_time =  (double) (toc-tic)*1000.0/ CLOCKS_PER_SEC;
+		times[c] = cpu_time; 	
+		sum += cpu_time;
+	}	
+	double mean_cpu_time = sum/60;
+	double std_cpu_time = 0.0;
+	for (int c = 0;c<count;c++){
+		std_cpu_time += pow(times[c] - mean_cpu_time, 2);
+	}
+	
+	//printf("Cycles: %lf", num_cycles);
+        printf("Average CPU Time: %lf \n", mean_cpu_time);
+	printf("Std. Dev. CPU Time: %lf \n", sqrt(std_cpu_time/count) );
+	Image * cypher = encrypt_Vigenere(img,K);
 	write_PPM("./output/encrypted_vignere_800.ppm", cypher);
 	
 	//TODO: maybe loop over this for 60 images (one second of data) and get an average cpu time.

@@ -1,0 +1,2 @@
+/opt/riscv/toolchain/bin/riscv64-unknown-elf-gcc encrypt_rc4_320.c -lm encrypt_rc4_320
+to run use rv-jit encrypt_rc4_320
