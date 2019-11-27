@@ -4,14 +4,14 @@
 #include<unistd.h>
 
 #include"alloc.h"
-#include"global_defs.h"
+//#include"global_defs.h"
 
 void *alloc(char *type, int size)
 {
 	void *ret=NULL;
 
 	if(!strcmp(type, "char")){
-		ret=malloc(sizeof(char)*16);
+		ret=malloc(sizeof(char)*size);
 		explicit_bzero(ret, sizeof(char)*size);
 	}
 
@@ -25,7 +25,7 @@ void *alloc(char *type, int size)
 void dealloc(char *type, int size, void *buf)
 {
 	if(!strcmp(type, "char")){
-		explicit_bzero(buf, sizeof(char)*16);
+		explicit_bzero(buf, sizeof(char)*size);
 	}
 
 	free(buf);
