@@ -1,0 +1,21 @@
+RC4
+Average CPU Time: 21.333333 
+Std. Dev. CPU Time: 3.858612 
+Average CPU Time: 84.833333 
+Std. Dev. CPU Time: 5.320297 
+Average CPU Time: 131.166667 
+Std. Dev. CPU Time: 3.210227 
+Vignere
+Average CPU Time: 25.000000 
+Std. Dev. CPU Time: 5.322906 
+Average CPU Time: 100.166667 
+Std. Dev. CPU Time: 2.229848 
+Average CPU Time: 156.166667 
+Std. Dev. CPU Time: 4.861984 
+Chaos
+Average CPU Time: 125.333333 
+Std. Dev. CPU Time: 4.988877 
+Average CPU Time: 530.500000 
+Std. Dev. CPU Time: 6.435578 
+Average CPU Time: 848.666667 
+Std. Dev. CPU Time: 4.268749

@@ -291,8 +291,8 @@ int main()
 	//char filename[80] = "/home/naman/pic.ppm";
 	
 	clock_t tic, toc;
-        long double cpu_time;
-        long double num_cycles;
+        double cpu_time;
+        double num_cycles;
 
 	
 	//apply emboss filter
@@ -301,14 +301,44 @@ int main()
 	//RC4 encrypt 
 	Image * img = read_PPM("./src_images/320_240.ppm");
 	char *K = "m2TJtI9hiJw74UAAuMSy0klQxC8N2GPlYK5EUFZ8SJ8yJX6uSRCGMfwO06ZqgPnYOR7au4rFZPGMkEz5AZosbbuTYuuCYlcN5bDSpK6ldW44cOaGWy9N2390ababcdcd";
-	tic = clock();
-	Image * cypher = encrypt_RC4(img, K);
-	toc = clock();
-	num_cycles = (double) (toc - tic);
-	cpu_time =  num_cycles / CLOCKS_PER_SEC;
-	printf("Cycles: %Lf", num_cycles);
-        printf("CPU Time: %Lf", cpu_time);
+	
+	
+	int count = 60;
+	double times[count];
+	double sum = 0.0;
+	for (int c = 0;c<count;c++){
+		tic = clock();
+		//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
+		//getrusage(RUSAGE_SELF, &before);
+
+		Image * cypher = encrypt_RC4(img, K);
+
+		toc = clock();
+		//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &stop);
+		//getrusage(RUSAGE_SELF, &after);	
+
+		//clock_gettime() method
+		//double cpu_time = (stop.tv_sec - start.tv_sec) * 1e6 + (stop.tv_nsec - start.tv_nsec) / 1e3;    //microseconds
+		//printf("CPU Time: %lf", cpu_time*.001);
+
+		//clock() method 
+		//num_cycles = (double) (toc - tic);
+		cpu_time =  (double) (toc-tic)*1000.0/ CLOCKS_PER_SEC;
+		times[c] = cpu_time; 	
+		sum += cpu_time;
+	}	
+	double mean_cpu_time = sum/60;
+	double std_cpu_time = 0.0;
+	for (int c = 0;c<count;c++){
+		std_cpu_time += pow(times[c] - mean_cpu_time, 2);
+	}
+	
+	//printf("Cycles: %lf", num_cycles);
+        printf("Average CPU Time: %lf \n", mean_cpu_time);
+	printf("Std. Dev. CPU Time: %lf \n", sqrt(std_cpu_time/count) );
+	
 	//write result 
+	Image * cypher = encrypt_RC4(img, K);
 	write_PPM("./output/encrypted_rc4_320.ppm", cypher);
 	
 	//Vignere encrypt 

@@ -324,14 +324,42 @@ int main()
 	
 	//Chaos map decrypt 
 	Image * img = read_PPM("./output/encrypted_chaos_320.ppm");
-	tic = clock();
-	Image * cypher = decrypt_Chirikov(img,10000);
-	toc = clock();
-	num_cycles = (double) (toc - tic);
-	cpu_time =  num_cycles / CLOCKS_PER_SEC;
-	printf("Cycles: %Lf", num_cycles);
-        printf("CPU Time: %Lf", cpu_time);
+	
+	int count = 60;
+	double times[count];
+	double sum = 0.0;
+	for (int c = 0;c<count;c++){
+		tic = clock();
+		//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
+		//getrusage(RUSAGE_SELF, &before);
+
+		Image * cypher = decrypt_Chirikov(img,10000);
+
+		toc = clock();
+		//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &stop);
+		//getrusage(RUSAGE_SELF, &after);	
+
+		//clock_gettime() method
+		//double cpu_time = (stop.tv_sec - start.tv_sec) * 1e6 + (stop.tv_nsec - start.tv_nsec) / 1e3;    //microseconds
+		//printf("CPU Time: %lf", cpu_time*.001);
+
+		//clock() method 
+		//num_cycles = (double) (toc - tic);
+		cpu_time =  (double) (toc-tic)*1000.0/ CLOCKS_PER_SEC;
+		times[c] = cpu_time; 	
+		sum += cpu_time;
+	}	
+	double mean_cpu_time = sum/60;
+	double std_cpu_time = 0.0;
+	for (int c = 0;c<count;c++){
+		std_cpu_time += pow(times[c] - mean_cpu_time, 2);
+	}
+	
+	//printf("Cycles: %lf", num_cycles);
+        printf("Average CPU Time: %lf \n", mean_cpu_time);
+	printf("Std. Dev. CPU Time: %lf \n", sqrt(std_cpu_time/count) );
 	 //write result 
+	Image * cypher = decrypt_Chirikov(img,10000);
 	write_PPM("./output/decrypted_chaos_320.ppm", cypher);
 
 
