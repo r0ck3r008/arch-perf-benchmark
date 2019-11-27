@@ -16,3 +16,4 @@ def write(data, fname):
             for col in row:
                 for val in col:
                     f.write('{};'.format(val))
+    print("Done")
