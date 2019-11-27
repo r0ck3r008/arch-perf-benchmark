@@ -31,6 +31,7 @@ def to_ndarray_vid(s_file):
 def to_ndarray_img(s_file):
     #to numpy.ndarray
     frame=cv2.imread(s_file)
+    process_frame(frame)
 
 def parse_file_type(s_file):
     global processes
