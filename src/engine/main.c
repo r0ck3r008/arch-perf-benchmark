@@ -2,9 +2,14 @@
 #include<stdlib.h>
 #include<string.h>
 
-#include"fifo.h"
-#include"image.h"
-#include"rc4.h"
+#include"utils/fifo.h"
+#include"utils/image.h"
+#include"utils/time_keeper.h"
+
+void fun_selector(int selector)
+{
+
+}
 
 int main(int argc, char *argv[])
 {
@@ -13,6 +18,6 @@ int main(int argc, char *argv[])
 	char *data=read_from(fifo_fd);
 
 	struct image *im=make_image(data, 240, 360);
-	start(im);
+	time_keeper(im, NULL);
 	printf("[!]Done!\n");
 }
