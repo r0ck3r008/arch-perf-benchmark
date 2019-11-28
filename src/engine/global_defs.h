@@ -9,7 +9,7 @@ struct pixel
 struct image
 {
 	unsigned int width, height;
-	pixel *data;
+	struct pixel *data;
 };
 
 #endif
