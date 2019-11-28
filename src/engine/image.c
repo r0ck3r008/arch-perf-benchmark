@@ -22,3 +22,13 @@ struct image *make_image(char *data, int size_h, int size_w)
 	printf("[!]Image received\n");
 	return im;
 }
+
+int get_img_width(struct image *im)
+{
+	return im->width;
+}
+
+int get_img_height(struct image *im)
+{
+	return im->height;
+}
