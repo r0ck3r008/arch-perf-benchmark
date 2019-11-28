@@ -4,6 +4,7 @@
 
 #include"fifo.h"
 #include"image.h"
+#include"rc4.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,5 +13,6 @@ int main(int argc, char *argv[])
 	char *data=read_from(fifo_fd);
 
 	struct image *im=make_image(data, 240, 360);
+	start(im);
 	printf("[!]Done!\n");
 }
