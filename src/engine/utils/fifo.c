@@ -32,10 +32,9 @@ char *read_from(int fd)
 		dealloc("char", 8, buffer);
 		_exit(-1);
 		}
-		if(strlen(buffer)==0){
-			printf("[!]Read compelete!\n");
+		if(strlen(buffer)==0)
 			exit=1;
-		}
+
 		sprintf(cmdr, "%s%s", cmdr, buffer);
 		explicit_bzero(buffer, sizeof(char)*8);
 	}
@@ -43,17 +42,3 @@ char *read_from(int fd)
 	free(buffer);
 	return cmdr;
 }
-
-/*char *read_from(int fd)
-{
-	int size=1000000;
-	char *cmdr=alloc("char", size);
-	if(read(fd, cmdr, sizeof(char)*size)==-1){
-		fprintf(stderr, "[-]Error in reading: %s\n",
-			strerror(errno));
-		dealloc("char", 500000, cmdr);
-		_exit(-1);
-	}
-
-	return cmdr;
-}*/

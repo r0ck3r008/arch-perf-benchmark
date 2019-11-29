@@ -19,7 +19,6 @@ struct image *make_image(char *data, int size_h, int size_w)
 		im->data[i].b=buf[2];
 	}
 
-	printf("[!]Image received\n");
 	return im;
 }
 
