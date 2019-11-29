@@ -3,6 +3,6 @@
 
 #include"utils/global_defs.h"
 
-struct image *encrypt(struct image *, char *);
+struct image *encrypt_vigenere(struct image *, char *);
 
 #endif

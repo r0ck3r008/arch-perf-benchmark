@@ -3,7 +3,7 @@
 #include"utils/alloc.h"
 #include"utils/image.h"
 
-struct image *encrypt_Chirikov(struct image *img, int K)
+struct image *encrypt_chirikov(struct image *img, int K)
 {
 	unsigned int w = get_img_width(img);
 	unsigned int h = get_img_height(img);

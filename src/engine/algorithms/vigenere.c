@@ -3,7 +3,7 @@
 #include"utils/image.h"
 #include"utils/alloc.h"
 
-struct image * encrypt_Vigenere(struct image *img, char *K)
+struct image * encrypt_vigenere(struct image *img, char *K)
 {
 	//first init empty target image
 	unsigned int w = get_img_width(img);
