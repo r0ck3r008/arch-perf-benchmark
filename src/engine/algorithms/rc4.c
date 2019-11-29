@@ -51,10 +51,11 @@ struct image *PRGA(struct image *img, unsigned char *M)
 	return img_cypher;
 }
 
-struct image *encrypt_rc4(struct image *img, char *K)
+struct image *encrypt_rc4(struct image *img, void *K)
 {
+	char *k=(char *)K;
 	//define key and M to fill
 	unsigned char M[256];
-	KSA(K,M);
+	KSA(k,M);
 	return PRGA(img,M);
 }

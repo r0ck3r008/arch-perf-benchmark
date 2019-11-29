@@ -3,11 +3,12 @@
 #include"utils/alloc.h"
 #include"utils/image.h"
 
-struct image *encrypt_chirikov(struct image *img, int K)
+struct image *encrypt_chirikov(struct image *img, void *K)
 {
 	unsigned int w = get_img_width(img);
 	unsigned int h = get_img_height(img);
 	struct image *img_cypher = alloc_image(w,h);
+	int k=*(int *)K;
 
 	int i_prime, j_prime;
 
@@ -19,7 +20,7 @@ struct image *encrypt_chirikov(struct image *img, int K)
 			if (i+j!= 0) {
 				i_prime = (i-1+j-1) % h;
 				j_prime = (int) (floor(
-					j-1+K*sin(2*3.14159*i_prime/h))) % h;
+					j-1+k*sin(2*3.14159*i_prime/h))) % h;
 				p_ct[i_prime*w + j_prime].r = p_pt[j + i*w].r;
 			}
 		}

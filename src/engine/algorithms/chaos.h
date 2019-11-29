@@ -3,6 +3,6 @@
 
 #include"utils/global_defs.h"
 
-struct image *encrypt_chirikov(struct image *, int);
+struct image *encrypt_chirikov(struct image *, void *);
 
 #endif

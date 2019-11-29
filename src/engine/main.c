@@ -10,16 +10,16 @@
 #include"algorithms/chaos.h"
 #include"algorithms/vigenere.h"
 
-struct image *(*fun_selector (int selector))(struct image *, char *)
+struct image *(*fun_selector (int selector))(struct image *, void *)
 {
-	struct image *(*encrypt_fn)(struct image *, char *);
+	struct image *(*encrypt_fn)(struct image *, void *);
 	switch(selector){
 	case 0:
 		encrypt_fn=encrypt_rc4;
 		break;
-/*	case 1:
+	case 1:
 		encrypt_fn=encrypt_chirikov;
-		break;*/
+		break;
 	case 2:
 		encrypt_fn=encrypt_vigenere;
 		break;
@@ -39,9 +39,8 @@ int main(int argc, char *argv[])
 	struct image *im=make_image(data, 240, 360);
 
 	struct image *(*fn)
-		(struct image *, char *)=fun_selector(strtol(
-							argv[1], NULL, 10));
+		(struct image *, void *)=fun_selector(strtol(
+							argv[2], NULL, 10));
 
 	time_keeper(im, fn);
-	printf("[!]Done!\n");
 }
