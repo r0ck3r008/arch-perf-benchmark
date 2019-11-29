@@ -14,7 +14,7 @@ struct image * encrypt_vigenere(struct image *img, void *K)
 	struct pixel *p_ct = img_cypher->data;
 	struct pixel *p_pt = img->data;
 	for (int i = 0;i<w*h;i++){
-		p_ct[i].r = (((unsigned int)k[i % strlen(K)]) + p_pt[i].r)%256;
+		p_ct[i].r = (((unsigned int)k[i % strlen(k)]) + p_pt[i].r)%256;
 	}
 
 	return img_cypher;
