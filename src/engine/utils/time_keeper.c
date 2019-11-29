@@ -30,7 +30,7 @@ void time_keeper(struct image *img, struct image *(*encrypt_fn)(struct image *,
 		sum += cpu_time;
 	}*/
 	tic=clock();
-	cypher=encrypt_fn(img, K);
+	cypher=encrypt_fn(img, (void *)K);
 	toc=clock();
 	cpu_time=(double) (toc-tic)*1000.0/ CLOCKS_PER_SEC;
 /*	double mean_cpu_time = sum/60;
