@@ -3,6 +3,7 @@
 
 #include"global_defs.h"
 
-void time_keeper(struct image *, void (*));
+void time_keeper(struct image *,
+		 struct image *(*)(struct image *, char *));
 
 #endif

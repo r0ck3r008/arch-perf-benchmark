@@ -8,7 +8,8 @@
 
 //TODO Add function pointer as a way to dynamically call the algorithm
 //TODO add the decryption
-void time_keeper(struct image *img, void (*fn))
+void time_keeper(struct image *img, struct image *(*encrypt_fn)(struct image *,
+								char *))
 {
 	clock_t tic, toc;
         double cpu_time;
@@ -22,7 +23,7 @@ void time_keeper(struct image *img, void (*fn))
 	double sum = 0.0;
 	for (int c = 0;c<count;c++){
 		tic = clock();
-		cypher = encrypt_RC4(img, K);
+		cypher = encrypt_fn(img, K);
 
 		toc = clock();
 		cpu_time =  (double) (toc-tic)*1000.0/ CLOCKS_PER_SEC;
