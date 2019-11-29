@@ -41,7 +41,7 @@ void time_keeper(struct image *img, struct image *(*encrypt_fn)(struct image *,
 
         printf("Average CPU Time: %lf \n", mean_cpu_time);
 	printf("Std. Dev. CPU Time: %lf \n", sqrt(std_cpu_time/count) );*/
-	printf("[!]Cpu time: %lf\n", cpu_time);
+	printf("%lf", cpu_time);
 
 	dealloc_image(img);
 	dealloc_image(cypher);

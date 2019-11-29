@@ -1,6 +1,6 @@
 from importlib import import_module
 import cv2
-from multiprocessing import Process
+from multiprocessing import Process, Queue
 from threading import Thread
 from libnacl import randombytes_uniform as ru
 from os import remove
@@ -8,6 +8,7 @@ from subprocess import run, PIPE
 from time import sleep
 
 io_helper=import_module('io_helper', '.')
+list_ops=import_module('list_ops', '.')
 
 def process_frame(frame):
     #arguments
@@ -28,9 +29,9 @@ def process_frame(frame):
     sleep(10)
 
     #subprocess
-    p=run('{}./engine/engine {} {}'.format(prefix, fname, algonum), 
+    p=run('{}./engine/engine {} {}'.format(prefix, fname, algonum),
             shell=True, stdout=PIPE, text=True)
-    print(p.stdout)
+    queue.put(p.stdout)
     remove(fname)
 
 def to_ndarray_vid(s_file):
@@ -64,8 +65,9 @@ def parse_args(args):
 
 def parse_file_type(args):
     s_file=parse_args(args)
-    global processes
+    global processes, queue
     processes=[]
+    queue=Queue()
     if '.jpg' in s_file or '.png' in s_file:
         to_ndarray_img(s_file)
     elif '.mp4' in s_file or 'http' in s_file:
@@ -76,3 +78,7 @@ def parse_file_type(args):
     for process in processes:
         process.join()
 
+    times=[]
+    while queue.empty()!=True:
+        times.append(float(queue.get()))
+    list_ops.list_ops(times)
