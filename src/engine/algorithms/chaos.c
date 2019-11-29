@@ -8,7 +8,7 @@ struct image *encrypt_chirikov(struct image *img, void *K)
 	unsigned int w = get_img_width(img);
 	unsigned int h = get_img_height(img);
 	struct image *img_cypher = alloc_image(w,h);
-	int k=*(int *)K;
+	int k=10000;
 
 	int i_prime, j_prime;
 
