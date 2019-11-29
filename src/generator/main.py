@@ -8,6 +8,10 @@ if __name__=='__main__':
     parser=ArgumentParser()
     parser.add_argument('-s', '--stream', required=True, metavar='',
                 dest='sfile', help='The stream to read from (image/video/network/Webcam)')
+    parser.add_argument('-a', '--algo', required=True, metavar='',
+                dest='algo', help='Choose from algorithms: Rc4/Chirikov/Vigenere')
+    parser.add_argument('-rv', '--riscv', action='store_true',
+                dest='riscv', help='Flag if the target is RISCV RV8')
     args=parser.parse_args()
 
-    stream.parse_file_type(args.sfile)
+    stream.parse_file_type(args)

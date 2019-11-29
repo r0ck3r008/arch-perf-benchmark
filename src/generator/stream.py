@@ -10,11 +10,26 @@ from time import sleep
 io_helper=import_module('io_helper', '.')
 
 def process_frame(frame):
+    #arguments
     fname='/tmp/pipe_{}'.format(ru(1000000))
+    algonum=0
+    prefix=''
+    if algo=='chirikov' or algo=='Chirikov':
+        algonum=1
+    elif algo=='Vigenere' or algo=='vigenere':
+        algonum=2
+
+    if riscv==True:
+        prefix='rv-jit '
+
+    #pipe
     io_helper.open_fifo(fname)
     t=Thread(target=io_helper.write, args=[frame, fname]).start()
     sleep(10)
-    p=run('./engine/engine {} 0'.format(fname), shell=True, stdout=PIPE, text=True)
+
+    #subprocess
+    p=run('{}./engine/engine {} {}'.format(prefix, fname, algonum), 
+            shell=True, stdout=PIPE, text=True)
     print(p.stdout)
     remove(fname)
 
@@ -40,7 +55,15 @@ def to_ndarray_img(s_file):
         processes.append(p)
         p.start()
 
-def parse_file_type(s_file):
+def parse_args(args):
+    global riscv, algo
+    riscv=args.riscv
+    algo=args.algo
+
+    return args.sfile
+
+def parse_file_type(args):
+    s_file=parse_args(args)
     global processes
     processes=[]
     if '.jpg' in s_file or '.png' in s_file:
