@@ -14,7 +14,7 @@ void fun_selector(struct image *im, int selector)
 {
 	switch(selector){
 	case 0:
-		time_keeper(im, encrypt_rc4, encrypt_rc4);
+		time_keeper(im, encrypt_rc4, decrypt_rc4);
 		break;
 	case 1:
 		time_keeper(im, encrypt_chirikov, decrypt_chirikov);

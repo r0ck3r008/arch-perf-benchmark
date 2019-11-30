@@ -31,7 +31,7 @@ struct image *decrypt_vigenere(struct image *img, void *K)
 	struct pixel *p_ct=img->data;
 	for (int i = 0;i<w*h;i++){
 		p_pt[i].r = ( p_ct[i].g - ((unsigned int)k[
-					   i % strlen(k)])) % 256;
+							i % strlen(k)])) % 256;
 	}
 	return img_plain;
 }
