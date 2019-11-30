@@ -36,7 +36,9 @@ int main(int argc, char *argv[])
 	int fifo_fd=open_fifo(argv[1]);
 	char *data=read_from(fifo_fd);
 
-	struct image *im=make_image(data, 240, 360);
+	int height=strtol(argv[3], NULL, 10);
+	int width=strtol(argv[4], NULL, 10);
+	struct image *im=make_image(data, height, width);
 
 	struct image *(*fn)
 		(struct image *, void *)=fun_selector(strtol(

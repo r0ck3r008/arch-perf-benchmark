@@ -12,6 +12,8 @@ if __name__=='__main__':
                 dest='algo', help='Choose from algorithms: Rc4/Chirikov/Vigenere')
     parser.add_argument('-rv', '--riscv', action='store_true',
                 dest='riscv', help='Flag if the target is RISCV RV8')
+    parser.add_argument('-S', '--size', metavar='', default='240x360',
+                dest='size', help="Set the input image size in 'heightxlength' format (Default 240x360)")
     args=parser.parse_args()
 
     stream.parse_file_type(args)

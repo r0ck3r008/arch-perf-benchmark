@@ -29,7 +29,7 @@ def process_frame(frame):
     sleep(10)
 
     #subprocess
-    p=run('{}./engine/engine {} {}'.format(prefix, fname, algonum),
+    p=run('{}./engine/engine {} {} {} {}'.format(prefix, fname, algonum, size[0], size[1]),
             shell=True, stdout=PIPE, text=True)
     queue.put(p.stdout)
     remove(fname)
@@ -57,9 +57,10 @@ def to_ndarray_img(s_file):
         p.start()
 
 def parse_args(args):
-    global riscv, algo
+    global riscv, algo, size
     riscv=args.riscv
     algo=args.algo
+    size=args.size.split('x')
 
     return args.sfile
 
