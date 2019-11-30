@@ -2,7 +2,6 @@ from argparse import ArgumentParser
 from importlib import import_module
 
 stream=import_module('stream', '.')
-io_helper=import_module('io_helper', '.')
 
 if __name__=='__main__':
     parser=ArgumentParser()
