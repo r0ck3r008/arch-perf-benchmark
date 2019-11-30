@@ -1,4 +1,4 @@
-ALL_OBJS := main.o utils/{time_keeper.o,fifo.o,alloc.o,image.o} algorithms/{rc4.o,chaos.o,vigenere.o}
+ALL_OBJS := main.o utils/time_keeper.o utils/fifo.o utils/alloc.o utils/image.o algorithms/rc4.o algorithms/chaos.o algorithms/vigenere.o
 LINKER_FLAGS := -lm -o
 COMPILER_FLAGS := -g -c
 
