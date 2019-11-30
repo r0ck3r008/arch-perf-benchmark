@@ -32,7 +32,7 @@ struct image *PRGA(struct image *img, unsigned char *M)
 {
 	unsigned int w = get_img_width(img);
 	unsigned int h = get_img_height(img);
-	struct image *img_cypher=alloc_image(w,h);
+	struct image *img_cypher=alloc_image(h, w);
 
 	int k,j = 0;
 
@@ -51,6 +51,27 @@ struct image *PRGA(struct image *img, unsigned char *M)
 	return img_cypher;
 }
 
+struct image *PRGA_decrypt(struct image *img, unsigned char *M)
+{
+	unsigned int w = get_img_width(img);
+	unsigned int h = get_img_height(img);
+	struct image *img_plain = alloc_image(h, w);
+
+	int k,j = 0;
+
+	struct pixel *p_pt = img_plain->data;
+	struct pixel *p_ct = img->data;
+	for (int i = 0;i < w*h;i++){
+		k = (k+1) % 256;
+		j = (j + M[k]) % 256;
+		swap(&M[k],&M[j]);
+
+		//apply key as xor with just red channel for now.
+		p_pt[i].r = ((M[k]+M[j]) % 256) ^ p_ct[i].g;
+	}
+	return img_plain;
+}
+
 struct image *encrypt_rc4(struct image *img, void *K)
 {
 	char *k=(char *)K;
@@ -58,4 +79,13 @@ struct image *encrypt_rc4(struct image *img, void *K)
 	unsigned char M[256];
 	KSA(k,M);
 	return PRGA(img,M);
+}
+
+struct image *decrypt_rc4(struct image *img, void *K)
+{
+	char *k=(char *)K;
+	//define key and M to fill
+	unsigned char M[256];
+	KSA(k,M);
+	return PRGA_decrypt(img,M);
 }

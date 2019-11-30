@@ -4,6 +4,7 @@
 #include"global_defs.h"
 
 void time_keeper(struct image *,
+		 struct image *(*)(struct image *, void *),
 		 struct image *(*)(struct image *, void *));
 
 #endif

@@ -50,7 +50,7 @@ def to_ndarray_vid(s_file):
 
 def to_ndarray_img(s_file):
     #to numpy.ndarray
-    for i in range(60):
+    for i in range(30):
         frame=cv2.imread(s_file)
         p=Process(target=process_frame, args=[frame,])
         processes.append(p)
@@ -79,7 +79,11 @@ def parse_file_type(args):
     for process in processes:
         process.join()
 
-    times=[]
+    enc_times=[]
+    dec_times=[]
     while queue.empty()!=True:
-        times.append(float(queue.get()))
-    list_ops.list_ops(times)
+        enc_time, dec_time=queue.get().split(':')
+        enc_times.append(float(enc_time))
+        dec_times.append(float(dec_time))
+    list_ops.list_ops(enc_times)
+    list_ops.list_ops(dec_times)

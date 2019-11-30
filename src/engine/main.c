@@ -10,24 +10,21 @@
 #include"algorithms/chaos.h"
 #include"algorithms/vigenere.h"
 
-struct image *(*fun_selector (int selector))(struct image *, void *)
+void fun_selector(struct image *im, int selector)
 {
-	struct image *(*encrypt_fn)(struct image *, void *);
 	switch(selector){
 	case 0:
-		encrypt_fn=encrypt_rc4;
+		time_keeper(im, encrypt_rc4, encrypt_rc4);
 		break;
 	case 1:
-		encrypt_fn=encrypt_chirikov;
+		time_keeper(im, encrypt_chirikov, decrypt_chirikov);
 		break;
 	case 2:
-		encrypt_fn=encrypt_vigenere;
+		time_keeper(im, encrypt_vigenere, decrypt_vigenere);
 		break;
 	default:
 		fprintf(stderr, "[-]Undefined algorithm\n");
 	}
-
-	return encrypt_fn;
 }
 
 int main(int argc, char *argv[])
@@ -40,9 +37,6 @@ int main(int argc, char *argv[])
 	int width=strtol(argv[4], NULL, 10);
 	struct image *im=make_image(data, height, width);
 
-	struct image *(*fn)
-		(struct image *, void *)=fun_selector(strtol(
-							argv[2], NULL, 10));
+	fun_selector(im, strtol(argv[2], NULL, 10));
 
-	time_keeper(im, fn);
 }

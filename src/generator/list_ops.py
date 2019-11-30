@@ -3,4 +3,4 @@ def list_ops(times):
     for val in times:
         s+=val
 
-    print('Avg: {}, Min: {}, Max{}'.format(s/len(times), min(times), max(times)))
+    print('Avg: {}, Min: {}, Max: {}'.format(s/len(times), min(times), max(times)))
