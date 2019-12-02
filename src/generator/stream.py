@@ -31,7 +31,6 @@ def process_frame(frame):
     #subprocess
     p=run('{}./engine/engine {} {} {} {}'.format(prefix, fname, algonum, size[0], size[1]),
             shell=True, stdout=PIPE)
-    print(p.stdout)
     queue.put(p.stdout.decode())
     remove(fname)
 
