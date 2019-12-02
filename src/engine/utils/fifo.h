@@ -2,6 +2,6 @@
 #define FIFO_H
 
 int open_fifo(char *);
-char *read_from(int);
+char *read_from(int, int, int);
 
 #endif

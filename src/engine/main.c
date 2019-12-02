@@ -31,10 +31,11 @@ int main(int argc, char *argv[])
 {
 	//arguments are pipe name and algo type
 	int fifo_fd=open_fifo(argv[1]);
-	char *data=read_from(fifo_fd);
-
 	int height=strtol(argv[3], NULL, 10);
 	int width=strtol(argv[4], NULL, 10);
+
+	char *data=read_from(fifo_fd, height, width);
+
 	struct image *im=make_image(data, height, width);
 
 	fun_selector(im, strtol(argv[2], NULL, 10));

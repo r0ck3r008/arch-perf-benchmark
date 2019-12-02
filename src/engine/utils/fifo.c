@@ -18,25 +18,25 @@ int open_fifo(char *fname)
 	}
 }
 
-char *read_from(int fd)
+char *read_from(int fd, int size_h, int size_w)
 {
-	int size=1000000;
+	int size=size_h*size_w*12;
 	char *cmdr=alloc("char", size);
-	char *buffer=alloc("char", 8);
+	char *buffer=alloc("char", 64);
 	int exit=0;
 	while(!exit){
-		if(read(fd, buffer, sizeof(char)*8)==-1){
-		fprintf(stderr, "[-]Error in reading the fifo: %s\n",
+		if(read(fd, buffer, sizeof(char)*64)==-1){
+			fprintf(stderr, "[-]Error in reading the fifo: %s\n",
 			strerror(errno));
-		dealloc("char", 470000, cmdr);
-		dealloc("char", 8, buffer);
-		_exit(-1);
+			dealloc("char", size, cmdr);
+			dealloc("char", 64, buffer);
+			_exit(-1);
 		}
 		if(strlen(buffer)==0)
 			exit=1;
 
-		sprintf(cmdr, "%s%s", cmdr, buffer);
-		explicit_bzero(buffer, sizeof(char)*8);
+		strncat(cmdr, buffer, sizeof(char)*64);
+		explicit_bzero(buffer, sizeof(char)*64);
 	}
 
 	free(buffer);
