@@ -36,7 +36,7 @@ def process_frame(frame):
 
 def to_ndarray_vid(s_file):
     cap_obj=cv2.VideoCapture(s_file)
-    while True:
+    for i in range(50):
         #to numpy.ndarray
         ret, frame=cap_obj.read()
         if ret==False:
