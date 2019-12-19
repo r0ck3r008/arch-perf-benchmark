@@ -26,7 +26,7 @@ def process_frame(frame):
     #pipe
     io_helper.open_fifo(fname)
     t=Thread(target=io_helper.write, args=[frame, fname]).start()
-    sleep(10)
+    sleep(1)
 
     #subprocess
     p=run('{}./engine/engine {} {} {} {}'.format(prefix, fname, algonum, size[0], size[1]),
@@ -36,7 +36,7 @@ def process_frame(frame):
 
 def to_ndarray_vid(s_file):
     cap_obj=cv2.VideoCapture(s_file)
-    for i in range(50):
+    for i in range(30):
         #to numpy.ndarray
         ret, frame=cap_obj.read()
         if ret==False:
